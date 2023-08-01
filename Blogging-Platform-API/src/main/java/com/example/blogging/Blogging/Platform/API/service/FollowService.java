@@ -26,4 +26,12 @@ public class FollowService {
 
         return followList!=null && followList.isEmpty() && !targetUser.equals(follower);
     }
+
+    public Follow findFollow(Integer followId) {
+        return followRepo.findById(followId).orElse(null);
+    }
+
+    public void unfollow(Follow follow) {
+        followRepo.delete(follow);
+    }
 }

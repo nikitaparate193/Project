@@ -222,4 +222,39 @@ public class UserService {
         return postRepo.save(existingPost);
 
     }
+
+    public String signOutBlogUser(String email) {
+        User user = userRepo.findFirstByUserEmail(email);
+        AuthenticationToken token = authenticationService.findFirstByUser(user);
+        authenticationService.removeToken(token);
+        return "User Signed out successfully";
+    }
+
+    public String unFollowUser(Integer followId, String followerEmail) {
+        Follow follow  = followService.findFollow(followId);
+        if(follow != null)
+        {
+            if(authorizeUnfollow(followerEmail,follow))
+            {
+                followService.unfollow(follow);
+                return follow.getCurrentUser().getUserName() + "not followed by " + followerEmail;
+            }
+            else
+            {
+                return "Unauthorized unfollow detected...Not allowed!!!!";
+            }
+
+        }
+        else
+        {
+            return "Invalid follow mapping";
+        }
+    }
+
+    private boolean authorizeUnfollow(String email, Follow follow) {
+        String  targetEmail = follow.getCurrentUser().getUserEmail();
+        String  followerEmail  = follow.getCurrentUserFollower().getUserEmail();
+
+        return targetEmail.equals(email) || followerEmail.equals(email);
+    }
 }

@@ -8,4 +8,5 @@ public interface IAuthenticationRepo extends JpaRepository<AuthenticationToken,L
     AuthenticationToken findFirstByTokenValue(String authTokenValue);
 
 
+    AuthenticationToken findFirstByUser(User user);
 }

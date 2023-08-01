@@ -32,4 +32,11 @@ public class AuthenticationService {
     }
 
 
+    public void removeToken(AuthenticationToken token) {
+        authenticationRepo.delete(token);
+    }
+
+    public AuthenticationToken findFirstByUser(User user) {
+        return authenticationRepo.findFirstByUser(user);
+    }
 }

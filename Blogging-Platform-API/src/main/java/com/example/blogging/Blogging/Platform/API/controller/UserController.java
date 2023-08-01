@@ -38,6 +38,16 @@ public class UserController {
         return userService.sigInBlogUser(signInInput);
     }
 
+    @DeleteMapping("user/signOut")
+    public String signOutBlogUser(String email, String token){
+        if(authenticationService.authenticate(email, token)){
+            return userService.signOutBlogUser(email);
+        }else{
+            return "Sign out not allowed for non Authenticate user";
+        }
+
+    }
+
     @GetMapping("users")
     public List<User> getAllUsers(){
         return userService.getAllUsers();
@@ -115,6 +125,15 @@ public class UserController {
         }
         else {
             return "Not an Authenticated user activity!!!";
+        }
+    }
+
+    @DeleteMapping("unfollow/target/{followId}")
+    public String unFollowUser(@PathVariable Integer followId, @RequestParam String followerEmail, @RequestParam String followerToken){
+        if(authenticationService.authenticate(followerEmail,followerToken)){
+            return userService.unFollowUser(followId,followerEmail);
+        }else{
+            return " Not an Authenticated user activity";
         }
     }
 
